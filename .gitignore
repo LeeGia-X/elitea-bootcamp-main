@@ -1,0 +1,47 @@
+### IntelliJ IDEA IDE ###
+**/.idea/
+**/*.iws
+**/*.iml
+**/*.ipr
+
+### Eclipse IDE ###
+**/.classpath
+**/.project
+**/.settings
+**/build/
+
+### NetBeans IDE ###
+**/nbproject/private/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
+
+### Maven build files ###
+**/target/
+
+### TestNG report output ###
+**/test-output/
+**/*.html
+
+### Log files ##
+**/logs/
+**/*.log
+
+### Example project artifacts ###
+**/allure-results/
+**/module-taf-examples/examples/
+**/examples.zip
+
+### macOS specific files ###
+**/.DS_Store
+**/._.DS_Store
+
+### Checkstyle projects generated files ###
+**/.checkstyle
+
+### VM crash logs, see http://www.java.com/en/download/help/error_hotspot.xml ###
+**/hs_err_pid*
+
+### AI supporters ###
+**/.promptLib/

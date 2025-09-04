@@ -1,0 +1,87 @@
+variables:
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+
+cache:
+  paths:
+    - .m2/repository
+
+stages:
+  - build
+  - test
+
+build-job:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: always
+    - when: never    
+  image: maven:3.8-openjdk-11
+  script: |
+    echo $SETTINGS_XML > $CI_PROJECT_DIR/ci_settings.xml
+    mvn $MAVEN_CLI_OPTS clean install -DskipTests --settings $CI_PROJECT_DIR/ci_settings.xml -Dpmd.skip=true -Dcheckstyle.skip=true
+    echo "Running unit tests..."
+    echo $SELENOID_URL
+    cd module-taf-examples
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-allure.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-rp.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-testng.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/allure/suite/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/rp/suite/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+    
+    # update apt-get and install libxml2-utils tools. Required for 'xmllint'
+    apt-get update -y
+    apt-get install -y libxml2-utils
+    
+    echo $SETTINGS_XML > $CI_PROJECT_DIR/ci_settings.xml
+
+    # generate and upload examples zip to wizard service
+    #            Activate when wizard will be accessible
+    #    mvn $MAVEN_CLI_OPTS test -Dtest=ExamplesGenerationTest
+    #    curl --location --request POST $WIZARD_ADD_EXAMPLES_ENDPOINT --form 'file=@"examples.zip";type=application/zip'
+    cd ..
+
+    # set required version for all modules
+    mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=$CI_COMMIT_TAG -DprocessAllModules
+    
+    # deploy required modules
+    mvn $MAVEN_CLI_OPTS deploy -P release-profile -DskipTests --settings $CI_PROJECT_DIR/ci_settings.xml
+
+    # grant execution permisssion for upload_module.sh script
+    #            Activate when wizard will be accessible
+    #    chmod +x upload_module.sh
+    #
+    #    # declare an array variable with exclude items
+    #    declare -a arr=("./module-taf-driver/pom.xml" "./module-taf-examples/pom.xml" "./module-taf-common" "*/target/*" "./pom.xml")
+    #
+    #    # prepare arguments for excluded pathes
+    #    segment="-not -path "
+    #    exlcude_argsline=""
+    #    for i in "${arr[@]}"
+    #    do
+    #      exlcude_argsline="$exlcude_argsline $segment\"$i\""
+    #    done
+    #
+    #    # find all pom.xml files (except files from exclusion) and upload information to wizard service
+    #    find . -name pom.xml $exlcude_argsline -exec sh upload_module.sh {} $CI_COMMIT_TAG $WIZARD_ADD_MODULE_ENDPOINT \;
+
+test_job:
+  stage: test
+  image: maven:3.8-openjdk-11
+  script: |
+    mvn $MAVEN_CLI_OPTS clean install -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
+    echo "Running unit tests..."
+    echo $SELENOID_URL
+    cd module-taf-examples
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-allure.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-rp.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.suiteXmlFiles="src/test/resources/suites/demo-testng.xml" -Dsurefire.provider="surefire-testng" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/allure/suite/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/rp/suite/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+    mvn $MAVEN_CLI_OPTS test -Ddriver.selenium.server=$SELENOID_URL -Dsurefire.includes="**/junit5/DemoSuite.java" -Dsurefire.provider="surefire-junit-platform" -Dpmd.skip=true -Dcheckstyle.skip=true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      allow_failure: true #TODO fix tests
+    - when: never
