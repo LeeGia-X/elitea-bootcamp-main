@@ -3,9 +3,12 @@ import re
 
 # Patterns to search for step definitions
 STEP_DEFINITION_PATTERNS = [
-    r"@Given\((?:[\s\S]*?)\)",
-    r"@When\((?:[\s\S]*?)\)",
-    r"@Then\((?:[\s\S]*?)\)"
+    r"@Given\(\".*?\"\)",                # Matches @Given("...")
+    r"@When\(\".*?\"\)",                 # Matches @When("...")
+    r"@Then\(\".*?\"\)",                 # Matches @Then("...")
+    r"@Given\(\^.*?\$\)",                # Matches @Given(^...)
+    r"@When\(\^.*?\$\)",                 # Matches @When(^...)
+    r"@Then\(\^.*?\$\)"                  # Matches @Then(^...)
 ]
 
 # Directory where `.java` files are located (update this to the correct local path)
