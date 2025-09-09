@@ -1,6 +1,7 @@
 package com.staf.examples.demo.kwd.runner;
 
 import com.staf.kwd.runner.CucumberTestRunner;
+import com.staf.kwd.runner.TestRunner;
 import org.testng.annotations.AfterMethod;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
