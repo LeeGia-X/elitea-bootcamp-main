@@ -1,9 +1,20 @@
 package com.staf.kwd.runner;
 
-import io.cucumber.testng.AbstractTestNGCucumberTests;
-import io.cucumber.testng.CucumberOptions;
+import com.staf.kwd.runner.CucumberTestRunner;
+import org.testng.annotations.AfterMethod;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 
-@CucumberOptions(       
-        glue = {"com.staf.kwd.library.steps" })
-public class TestRunner extends AbstractTestNGCucumberTests{
+public class TestRunner extends CucumberTestRunner {
+    @AfterMethod
+    public void quitBrowser() {
+        if (WebDriverRunner.hasWebDriverStarted()) {
+            // Cleanup in case session persist in the same storage between test runs
+            Selenide.clearBrowserCookies();
+            Selenide.clearBrowserLocalStorage();
+            Selenide.executeJavaScript("sessionStorage.clear();");
+            // Completely quit the browser
+            Selenide.closeWebDriver();
+        }
+    }
 }
