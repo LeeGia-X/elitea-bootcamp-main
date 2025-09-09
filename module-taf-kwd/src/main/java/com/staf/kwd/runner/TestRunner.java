@@ -5,7 +5,7 @@ import org.testng.annotations.AfterMethod;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 
-public class KwdRunner extends CucumberTestRunner {
+public class TestRunner extends CucumberTestRunner {
     @AfterMethod
     public void quitBrowser() {
         if (WebDriverRunner.hasWebDriverStarted()) {
