@@ -8,6 +8,11 @@ on:
         required: false
         default: 'module-taf-examples'
         type: string
+      feature_runner:
+        description: 'Feature runner'
+        required: false
+        default: 'com.staf.examples.demo.kwd.runner.KwdRunner'
+        type: string
       feature_path:
         description: 'Feature path'
         required: false
@@ -18,6 +23,7 @@ on:
         required: false
         default: 'smoke'
         type: string
+        
       
   
   push:
@@ -55,10 +61,12 @@ jobs:
       run: |
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           echo "FEATURE_MODUL=${{ github.event.inputs.feature_modul }}" >> $GITHUB_ENV
+          echo "FEATURE_RUNNER=${{ github.event.inputs.feature_runner }}" >> $GITHUB_ENV
           echo "FEATURE_PATH=${{ github.event.inputs.feature_path }}" >> $GITHUB_ENV
           echo "FEATURE_NAME=${{ github.event.inputs.feature_file }}" >> $GITHUB_ENV
         else
           echo "FEATURE_MODUL=module-taf-examples" >> $GITHUB_ENV
+          echo "FEATURE_RUNNER=com.staf.examples.demo.kwd.runner.KwdRunner" >> $GITHUB_ENV
           echo "FEATURE_PATH=src/test/java/com/staf/examples/demo/kwd/features" >> $GITHUB_ENV
           echo "FEATURE_NAME=smoke" >> $GITHUB_ENV          
         fi
@@ -71,7 +79,7 @@ jobs:
         mvn test -pl ${FEATURE_MODUL} -e \
           -Dpmd.skip=true \
           -Dcheckstyle.skip=true \
-          -Dtest=com.staf.examples.demo.kwd.runner.KwdRunner \
+          -Dtest=${FEATURE_RUNNER} \
           -Dcucumber.features=${FEATURE_PATH}/${FEATURE_NAME}.feature \
           -Dselenide.headless=true \
           -Dselenide.browser=chrome \
