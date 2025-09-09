@@ -10,7 +10,7 @@ on:
         type: string
   
   push:
-    branches: [ main, master ]
+    branches-ignore: [ main, master ]
   
   pull_request:
     branches: [ main, master ]
