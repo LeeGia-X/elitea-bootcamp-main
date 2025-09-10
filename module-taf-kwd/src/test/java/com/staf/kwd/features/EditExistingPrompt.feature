@@ -3,8 +3,7 @@ Feature: Edit Existing Prompt
   I want to edit an existing prompt
   So that I can update its context
  
-  Scenario: Edit the context of an existing prompt
-    Given I am logged in
+  Scenario: Edit the context of an existing prompt   
     When I open "https://nexus.elitea.ai" url
     And I type "alita@elitea.ai" to "EliteaLoginPage -> usernameInput"
     And I type "rokziJ-nuvzo4-hucmih" to "EliteaLoginPage -> passwordInput"
