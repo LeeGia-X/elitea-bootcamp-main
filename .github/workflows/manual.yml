@@ -6,7 +6,7 @@ on:
       feature_file:
         description: 'Feature file name (without .feature extension)'
         required: false
-        default: 'test-1'
+        default: 'EditExistingPrompt'
         type: string
   
   push:
