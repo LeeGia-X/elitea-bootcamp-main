@@ -57,7 +57,7 @@ jobs:
           -Dpmd.skip=true \
           -Dcheckstyle.skip=true \
           -Dtest=com.staf.kwd.runner.CucumberTestRunner \
-          -Dcucumber.features=src/test/resources/features/${FEATURE_NAME}.feature \
+          -Dcucumber.features=src/test/java/com/staf/kwd/features/${FEATURE_NAME}.feature \
           -Dselenide.headless=true \
           -Dselenide.browser=chrome \
           -Dselenide.browserSize=1920x1080 \
