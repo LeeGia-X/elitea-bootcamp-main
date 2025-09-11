@@ -64,12 +64,6 @@
             <artifactId>selenide</artifactId>
             <version>${selenide.version}</version>
         </dependency>
-        
-        <dependency>
-            <groupId>com.staf.examples</groupId>
-            <artifactId>module-taf-examples</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
