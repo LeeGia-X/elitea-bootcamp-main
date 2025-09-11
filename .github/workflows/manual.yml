@@ -49,9 +49,7 @@ jobs:
         fi
     
     - name: Build project
-      run: |
-        mvn install -pl module-taf-examples -am
-        mvn clean install -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
+      run: mvn clean install -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
     
     - name: Run Cucumber Tests
       run: |
