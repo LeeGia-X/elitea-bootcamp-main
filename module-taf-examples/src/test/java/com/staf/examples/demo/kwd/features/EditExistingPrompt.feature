@@ -16,7 +16,8 @@ Feature: Edit Existing Prompt
     And I click 'EliteaMainPage -> menuButton'
     And I click 'EliteaMainPage -> promptMenuItem'
     # Select an existing prompt by title
-    And I select 'TestPrompt1' from 'EliteaPromptsPage -> selectPrompt'
+    Then I expect 'EliteaPromptsPage -> promptCards[1]' to be visible
+    And I click 'EliteaPromptsPage -> promptCards[1]'
     # Edit the Context field
     Then I type 'Updated Test Context' to 'EliteaEditPromptPage -> contextTextarea'
     # Save the changes
