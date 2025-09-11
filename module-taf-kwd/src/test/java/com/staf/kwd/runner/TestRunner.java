@@ -6,5 +6,5 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = { "classpath:features/EditExistingPrompt.feature" },
         glue = {"com.staf.kwd.library.steps" })
-public class CucumberTestRunner extends AbstractTestNGCucumberTests{
+public class TestRunner extends AbstractTestNGCucumberTests{
 }

@@ -56,7 +56,7 @@ jobs:
         mvn test -pl module-taf-kwd -e \
           -Dpmd.skip=true \
           -Dcheckstyle.skip=true \
-          -Dtest=com.staf.kwd.runner.CucumberTestRunner \
+          -Dtest=com.staf.kwd.runner.TestRunner \
           -Dcucumber.features=src/test/java/com/staf/kwd/features/${FEATURE_NAME}.feature \
           -Dselenide.headless=true \
           -Dselenide.browser=chrome \
