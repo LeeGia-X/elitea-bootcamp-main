@@ -10,8 +10,12 @@ Feature: Edit Existing Prompt
      And I click "EliteaLoginPage -> signInBtn"
      And I click "EliteaMainPage -> projectSelector"
      And I click "EliteaMainPage -> privateProjectListItem"
+     Then I expect "EliteaMainPage -> avatar" to be visible
+     And I wait 5 seconds
+     And I click "EliteaMainPage -> projectSelector"
+     And I click "EliteaMainPage -> privateProjectListItem"
  
-   Scenario: Successfully edit an existing prompt
+   Scenario: Successfully edit an existing prompt   
      Given I click "EliteaMainPage -> menuButton"
      And I click "EliteaMainPage -> promptMenuItem"
      And I select "TestPrompt1" from "EliteaPromptsPage -> promptCards"
