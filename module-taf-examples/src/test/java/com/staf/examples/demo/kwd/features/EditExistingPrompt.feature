@@ -12,8 +12,9 @@ Feature: Edit Existing Prompt
     And I wait 5 seconds
     # Switch to the Private project
     And I click 'EliteaMainPage -> projectSelector'
-    And I wait 5 seconds
+    And I wait 3 seconds
     And I click 'EliteaMainPage -> privateProjectListItem'
+    Then I expect 'EliteaMainPage -> menuButton' to be clickable
     # Navigate to the Prompts menu
     And I click 'EliteaMainPage -> menuButton'
     And I click 'EliteaMainPage -> promptMenuItem'
