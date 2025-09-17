@@ -6,14 +6,17 @@ Feature: Edit Existing Prompt
     Then I type 'rokziJ-nuvzo4-hucmih' to 'EliteaLoginPage -> passwordInput'
     Then I click 'EliteaLoginPage -> signInBtn'
     Then I expect 'EliteaMainPage -> avatar' to be visible
+    Then I expect 'EliteaMainPage -> projectSelector' to be clickable
     And I click 'EliteaMainPage -> projectSelector'
+    And I wait 3 seconds
     And I click 'EliteaMainPage -> privateProjectListItem'
-
-  Scenario: TC05
     And I click 'EliteaMainPage -> menuButton'
     And I click 'EliteaMainPage -> promptMenuItem'
-    And I click 'EliteaPromptsPage -> existingPrompt'
-    And I click 'EliteaPromptsPage -> editPromptButton'
+
+  Scenario: TC05
+    When I click 'TestPrompt1' text in 'EliteaPromptsPage -> promptCards' collection
+    And I click 'EliteaEditPromptPage -> configurationTab'
     Then I type 'Updated Test Context' to 'EliteaEditPromptPage -> contextTextarea'
     And I click 'EliteaEditPromptPage -> saveButton'
-    Then I expect 'EliteaEditPromptPage -> successMessage' to be visible
+    Then I expect 'EliteaEditPromptPage -> alertMessage' to be visible
+    Then I expect 'EliteaEditPromptPage -> alertMessage' has exact text value 'Prompt updated successfully'
